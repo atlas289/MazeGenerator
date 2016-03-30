@@ -6,10 +6,11 @@
 #include <stdlib.h>
 #include <cairo.h>
 
-#define SIZE 50    /* maze is 50x50 cells */
+#define SIZE 50    /* maze size */
 
 /* simulates tile locations and values represent 'visited' status */
 int ** maze;   
+int width;
 
 void draw_grid(cairo_t *);
 void generate_maze(cairo_t *);
@@ -25,8 +26,10 @@ int main()
     time_t t;
     srand((unsigned) time(&t));
     
+    width = (SIZE*18) + 100;
+    
     /* make the drawing canvas 1000x1000 pixels using rgb colors */
-    cairo_surface_t * surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1000, 1000);
+    cairo_surface_t * surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, width);
     cairo_t * cr = cairo_create (surface);    /* our Cairo context is associated with the surface */
   
     draw_grid(cr);       /* initialize the grid */
@@ -47,7 +50,7 @@ void draw_grid(cairo_t *cr)
 {
     /* create a background */
     cairo_set_source_rgb(cr, 0, 0, 0);         /* black */
-    cairo_rectangle(cr, 0, 0, 1000, 1000);     /* set the background to cover the entire canvas */
+    cairo_rectangle(cr, 0, 0, width, width);     /* set the background to cover the entire canvas */
     cairo_stroke_preserve(cr);
     cairo_fill(cr);
   
@@ -58,13 +61,13 @@ void draw_grid(cairo_t *cr)
     /* create a 50x50 cell grid  (each cell is 18x18 px)
       and the padding around the maze is 50px */
     int i;
-    for(i = 0; i < 918; i+=18)
+    for(i = 0; i < width-82; i+=18)
     {
         cairo_move_to(cr, 50, 50+i);    /* initialize the starting point */
-        cairo_line_to(cr, 950, 50+i);   /* draw horizontal line */
+        cairo_line_to(cr, width-50, 50+i);   /* draw horizontal line */
         cairo_stroke(cr);
         cairo_move_to(cr, 50+i, 50);    /* initialize the starting point */
-        cairo_line_to(cr, 50+i, 950);   /* draw vertical line */
+        cairo_line_to(cr, 50+i, width-50);   /* draw vertical line */
         cairo_stroke(cr);
     }
 }
