@@ -44,7 +44,6 @@ int main()
 }
 
 
-
 /* Setup the initial grid with every cell walled in. */
 void draw_grid(cairo_t *cr)
 {
